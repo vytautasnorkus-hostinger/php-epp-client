@@ -1,0 +1,61 @@
+<?php
+
+namespace Metaregistrar\EPP;
+
+class nicbrEppInfoDomainResponse extends eppDnssecInfoDomainResponse
+{
+    /**
+     * @return string|null
+     */
+    public function getTicketNumber()
+    {
+        return $this->queryPath('/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:ticketNumber');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOrganization()
+    {
+        return $this->queryPath('/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:organization');
+    }
+
+    /**
+     * @return array
+     */
+    public function getDomainNameserversArray()
+    {
+        $nameservers = [];
+
+        foreach ($this->getDomainNameservers() as $nameserver) {
+            $nameservers[] = $nameserver->getHostname();
+        }
+
+        return $nameservers;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDnsPendingErrors()
+    {
+        $result = [];
+
+        $xpath = $this->xPath();
+        $errors = $xpath->query('/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:pending/brdomain:dns');
+
+        if (!$errors->length) {
+            return $result;
+        }
+
+        /** @var \DOMElement $error */
+        foreach ($errors as $error) {
+            $result[] = [
+                'reason' => $error->getAttribute('status'),
+                'host_name' => $error->getElementsByTagName('hostName')->item(0)->nodeValue
+            ];
+        }
+
+        return $result;
+    }
+}
