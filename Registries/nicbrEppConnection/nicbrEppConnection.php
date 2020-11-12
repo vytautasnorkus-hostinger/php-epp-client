@@ -4,6 +4,9 @@ namespace Metaregistrar\EPP;
 
 class nicbrEppConnection extends eppConnection
 {
+    /** @var bool $verify_peer_name */
+    protected $verify_peer_name = false;
+    
     /**
      * @param bool        $logging
      * @param string|null $settingsfile
