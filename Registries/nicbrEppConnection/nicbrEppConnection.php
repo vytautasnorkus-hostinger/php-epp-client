@@ -19,5 +19,6 @@ class nicbrEppConnection extends eppConnection
 
         parent::useExtension('nicbr-1.0');
         parent::addExtension('brdomain', 'urn:ietf:params:xml:ns:brdomain-1.0');
+        parent::addExtension('brorg', 'urn:ietf:params:xml:ns:brorg-1.0');
     }
 }
