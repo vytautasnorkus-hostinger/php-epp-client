@@ -4,6 +4,8 @@ namespace Metaregistrar\EPP;
 
 class nicbrEppInfoDomainResponse extends eppDnssecInfoDomainResponse
 {
+    const PUBLICATION_FLAG_ON_HOLD = 'onHold';
+
     /**
      * @return string|null
      */
@@ -18,6 +20,28 @@ class nicbrEppInfoDomainResponse extends eppDnssecInfoDomainResponse
     public function getOrganization()
     {
         return $this->queryPath('/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:organization');
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPublicationFlagOnHold()
+    {
+        $publicationFlag = $this->queryPath(
+            '/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:publicationStatus/@publicationFlag'
+        );
+
+        return $publicationFlag === self::PUBLICATION_FLAG_ON_HOLD;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getOnHoldReason()
+    {
+        return $this->queryPath(
+            '/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:publicationStatus/brdomain:onHoldReason'
+        );
     }
 
     /**
@@ -41,7 +65,7 @@ class nicbrEppInfoDomainResponse extends eppDnssecInfoDomainResponse
     {
         $result = [];
 
-        $xpath = $this->xPath();
+        $xpath  = $this->xPath();
         $errors = $xpath->query('/epp:epp/epp:response/epp:extension/brdomain:infData/brdomain:pending/brdomain:dns');
 
         if (!$errors->length) {
@@ -51,8 +75,8 @@ class nicbrEppInfoDomainResponse extends eppDnssecInfoDomainResponse
         /** @var \DOMElement $error */
         foreach ($errors as $error) {
             $result[] = [
-                'reason' => $error->getAttribute('status'),
-                'host_name' => $error->getElementsByTagName('hostName')->item(0)->nodeValue
+                'reason'    => $error->getAttribute('status'),
+                'host_name' => $error->getElementsByTagName('hostName')->item(0)->nodeValue,
             ];
         }
 
