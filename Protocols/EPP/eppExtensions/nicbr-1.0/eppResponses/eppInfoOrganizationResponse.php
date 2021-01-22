@@ -11,4 +11,12 @@ class eppInfoOrganizationResponse extends eppInfoContactResponse
     {
         return $this->queryPath('/epp:epp/epp:response/epp:extension/brorg:infData/brorg:organization');
     }
+
+    /**
+     * @return string
+     */
+    public function getResponsible()
+    {
+        return $this->queryPath('/epp:epp/epp:response/epp:extension/brorg:infData/brorg:responsible');
+    }
 }
