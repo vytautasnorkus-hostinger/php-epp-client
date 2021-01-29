@@ -381,7 +381,11 @@ class eppResponse extends \DOMDocument {
             $result = $object->getElementsByTagName($path);
         } else {
             $xpath = $this->xPath();
-            $result = $xpath->query($path);
+            try {
+                $result = $xpath->query($path);
+            } catch (\Exception $e) {
+                throw $e;
+            }
         }
         if (is_object($result) && ($result->length > 0)) {
             return trim($result->item(0)->nodeValue);
