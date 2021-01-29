@@ -20,6 +20,8 @@ class domregEppConnection extends eppConnection
             'urn:ietf:params:xml:ns:host-1.0'                 => 'host',
         ]);
 
+        $this->enableDnssec();
+
         parent::useExtension('domreg-1.0');
     }
 }
