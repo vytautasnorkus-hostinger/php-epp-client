@@ -8,6 +8,8 @@ class domregEppTransferRequest extends eppTransferRequest
 
     const TRANSFER_TYPE_TRANSFER = 'transfer';
 
+    const ON_EXPIRE_DELETE = 'delete';
+
     /** @var string $transferType */
     private $transferType;
 
@@ -20,7 +22,7 @@ class domregEppTransferRequest extends eppTransferRequest
     public function __construct($operation, $object, $type)
     {
         $this->setTransferType($type);
-        
+
         parent::__construct($operation, $object);
     }
 
@@ -47,6 +49,7 @@ class domregEppTransferRequest extends eppTransferRequest
         $this->domainobject = $this->createElement('domain:transfer');
         $this->domainobject->appendChild($this->createElement('domain:name', $domain->getDomainname()));
         $this->domainobject->appendChild($this->createElement('domain:trType', $this->transferType));
+        $this->domainobject->appendChild($this->createElement('domain:onExpire', self::ON_EXPIRE_DELETE));
         $this->domainobject->appendChild($this->createElement('domain:registrant', $domain->getRegistrant()));
         $this->domainobject->appendChild($this->createElement('domain:contact', $techContact->getContactHandle()));
 
